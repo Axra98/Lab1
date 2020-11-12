@@ -1,70 +1,160 @@
+import javax.swing.text.Position;
 import java.awt.*;
+import java.awt.geom.Point2D;
 
-public class Car implements Movable{
+public abstract class Car implements Movable{
 
-    public int nrDoors; // Number of doors on the car
-    public double enginePower; // Engine power of the car
-    public double currentSpeed; // The current speed of the car
-    public Color color; // Color of the car
-    public String modelName; // The car model name
-    int dir, x, y;
-    Point pos = new Point(x, y);
+    protected int nrDoors; // Number of doors on the car
+    protected double enginePower, currentSpeed, x,y; // Engine power of the car The current speed of the car, riktningarna i planet för move.
+    protected Color color; // Color of the car
+    protected String modelName; // The car model name
+    protected Direction direction = Direction.UP;
+    protected Point.Double position = new Point.Double(); //default x=0, y=0
 
-    public int getNrDoors(){
+    protected int getNrDoors(){
         return nrDoors;
     }
 
-    public double getEnginePower(){
+    /**
+     * Returnerar antalet dörrar.
+     */
+
+    protected double getEnginePower(){
         return enginePower;
     }
 
-    public double getCurrentSpeed(){
-        if(currentSpeed >= 0 && currentSpeed <= getEnginePower()) {
-            return currentSpeed;
-        }
-        else {
-            return 0;
-        }
-    }
+    /**
+     * Returnerar motoreffekten
+     */
 
-    public Color getColor(){
+    protected double getCurrentSpeed(){
+        return currentSpeed;
+    }
+    /** Eftersom incrementspeed och decrementspeed ger att man inte kan överstiga
+     * enginepower respektive understiga 0
+     * Returnerar currentSpeed
+     */
+
+    protected Color getColor(){
         return color;
     }
 
-    public void setColor(Color clr){
+    /**
+     * Returnerar färgen på en bil
+     * @param clr
+     */
+
+    protected void setColor(Color clr){
         color = clr;
     }
 
-    public void startEngine(){
+    /**
+     * Används för att sätta färgen på en bil
+     */
+
+    protected void startEngine(){
         currentSpeed = 0.1;
     }
 
-    public void stopEngine(){
+    /**
+     * Startar motorn
+     */
+
+    protected void stopEngine(){
         currentSpeed = 0;
     }
 
-    public void move() {
-        if(dir == 0)
-            pos.move(x, y+1);
-        if(dir == 1)
-            pos.move(x+1, y);
-        if(dir == 2)
-            pos.move(x, y-1);
-        if(dir == 3)
-            pos.move(x-1, y);
+    /**
+     * Stänger av motorn
+     * @return
+     */
+
+    protected abstract double speedFactor();
+    /**
+     * En speedFactor som anvädns i incrementSpeed och decrementSpeed
+     * @param amount
+     */
+
+    protected void incrementSpeed(double amount){
+        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
     }
+    /**Eftersom min funktionen väljer det som är minst av funktionen och enginpower
+     * kommer currentSpeed aldrig vara större än enginePower.
+     */
+
+    protected void decrementSpeed(double amount){
+        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0.0);
+    }
+    /**Eftersom max funktionen väljer det som är störst av funktionen och 0.0
+     * kommer currentSpeed aldrig vara mindre än 0.0.
+     */
+
+    protected void gas(double amount){
+        if(amount>=0.0 && amount <= 1.0)
+            incrementSpeed(amount);
+    }
+    /**if satsen accepterar bara värden mellan 0 och 1. Detta gör att gas aldrig kommer
+    * kunna sänka farten.
+    */
+
+    // TODO fix this method according to lab pm
+    protected void brake(double amount){
+        if(amount>=0.0 && amount <= 1.0)
+            decrementSpeed(amount);
+    }
+    /**if-satsen accepterar bara värden mellan 0 och 1. Detta gör att break aldrig kommer
+    * kunna höja farten.
+    */
+
+    protected enum Direction{
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN,
+    }
+
+    public void move() {
+        switch (direction){
+            case UP: position.setLocation(x, y += currentSpeed); break;
+            case RIGHT: position.setLocation(x += currentSpeed, y); break;
+            case DOWN: position.setLocation(x, y -= currentSpeed); break;
+            case LEFT: position.setLocation(x -= currentSpeed, y); break;
+        }
+    }
+     /**Tanken är att man ska ändra x/y koordninaterna efter riktning och hastighet
+     eftersom vi gör om Point till en double använder vi setLocation istället för move för
+     att byta lokalen.
+     */
 
     public void turnLeft() {
-        if(dir == 0)
-            dir = 3;
-        else
-            dir = dir-1;
+        switch (direction){
+            case UP: direction = Direction.LEFT; break;
+            case LEFT: direction = Direction.DOWN; break;
+            case DOWN: direction = Direction.RIGHT; break;
+            case RIGHT: direction = Direction.UP; break;
+        }
+    }
+    /** Här ändras riktningen mha switch statement. Så vid turnLeft så ändras riktningen ett steg till vänster
+     * så turnLeft: UP->LEFT, LEFT->DOWN
+     */
+
+   public void turnRight() {
+        switch (direction){
+            case UP: direction = Direction.RIGHT; break;
+            case RIGHT: direction = Direction.DOWN; break;
+            case DOWN: direction = Direction.LEFT; break;
+            case LEFT: direction = Direction.UP; break;
+        }
+    }
+    /** Samma princip som i turnLeft fast åt motsatt håll.
+     *
+     */
+
+    protected Point2D getPos(){
+       return position;
     }
 
-    public void turnRight() {
-        if(dir == 3)
-            dir = 0;
-        else
-            dir = dir+1;
+    protected Direction getDirection(){
+       return direction;
     }
 }

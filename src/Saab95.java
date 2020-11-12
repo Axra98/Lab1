@@ -1,10 +1,13 @@
 import java.awt.*;
 
 public class Saab95 extends Car{
+    /** Denna klass ärver från Car. Man får med alla metoder pluss att man lägger till egna här.
+     *
+     */
 
     private boolean turboOn;
 
-    public Saab95(){
+    protected Saab95(){
         nrDoors = 2;
         color = Color.red;
         enginePower = 125;
@@ -13,39 +16,22 @@ public class Saab95 extends Car{
         stopEngine();
     }
 
-    public void setTurboOn(){
+    protected void setTurboOn(){
         turboOn = true;
     }
 
-    public void setTurboOff(){
+    protected void setTurboOff(){
         turboOn = false;
     }
 
-    private double speedFactor(){
+    protected double speedFactor() {
         double turbo = 1;
-        if(turboOn) turbo = 1.3;
-        return enginePower * 0.01 * turbo;
+        if (turboOn) turbo = 1.3;
+            return enginePower * 0.01 * turbo;
     }
-
-    public void incrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() + speedFactor() * amount;
-    }
-
-    public void decrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() - speedFactor() * amount;
-    }
-
-    // TODO fix this method according to lab pm
-    public void gas(double amount){
-        if(amount <= 0 && amount >= 1) {
-            incrementSpeed(amount);
-        }
-    }
-
-    // TODO fix this method according to lab pm
-    public void brake(double amount){
-        if(amount <= 0 && amount >= 1) {
-            decrementSpeed(amount);
-        }
-    }
+    /**Denna metod heter speedFactor vilket är samma som den i Car klassen. Mha en override skriver man dock
+     * över det som finns i car och använder denna istället, eftersom Saab95 har en turbo.
+     * Skulle någon annan bil (skapar en annan klass som ärver från Car) inte ha några speciella
+     * preferenser kring speedFactor kan man använda den som finns i Car och behöver därmed inte skapa en ny.
+     */
 }
