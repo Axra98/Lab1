@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class Volvo240 extends Car {
 
@@ -9,10 +10,9 @@ public class Volvo240 extends Car {
     private final static double trimFactor = 1.25;
 
     protected Volvo240(){
-        nrDoors = 4;
-        color = Color.black;
-        enginePower = 100;
+        super(4, 100, Color.GRAY, "Volvo 240", new Point.Double(0,0));
         stopEngine();
+
     }
 
     /** Här får man en speedFactor som tar hänsyn till en trimFactor.
@@ -21,7 +21,7 @@ public class Volvo240 extends Car {
      * tar man hänsyn till trimFactor, något som den i Car inte gör.
      */
     protected double speedFactor(){
-        return enginePower * 0.01 * trimFactor;
+        return getEnginePower() * 0.01 * trimFactor;
     }
 
 }

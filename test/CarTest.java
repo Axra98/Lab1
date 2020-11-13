@@ -16,7 +16,7 @@ public class CarTest {
     @Test
     public void testMove(){
         volvo.startEngine();
-        volvo.position = new Point2D.Double(0,0);
+
         volvo.direction = Car.Direction.UP;
         volvo.move();
         assertTrue(volvo.getPos().getX() == 0);
@@ -110,8 +110,8 @@ public class CarTest {
     @Test
     public void testColor(){
 
-        assertTrue(saab.getColor().equals(Color.RED));
-        assertTrue(volvo.getColor().equals(Color.BLACK));
+        assertTrue(saab.getColor().equals(Color.CYAN));
+        assertTrue(volvo.getColor().equals(Color.GRAY));
 
         volvo.setColor(Color.green);
         saab.setColor(Color.yellow);
@@ -149,8 +149,7 @@ public class CarTest {
 
     @Test
     public void testGetPos(){
-        saab.position = new Point.Double(1,1);
-        Point2D.Double point = new Point2D.Double(1,1);
+        Point2D.Double point = new Point2D.Double(0,0);
         assertTrue(saab.getPos().equals(point));
     }
 

@@ -4,15 +4,33 @@ import java.awt.geom.Point2D;
 
 public abstract class Car implements Movable{
 
-    protected int nrDoors; // Number of doors on the car
-    protected double enginePower, currentSpeed, x,y; // Engine power of the car The current speed of the car, riktningarna i planet för move.
-    protected Color color; // Color of the car
-    protected String modelName; // The car model name
+    private int nrDoors; // Number of doors on the car
+    private double enginePower, currentSpeed, x,y; // Engine power of the car The current speed of the car, riktningarna i planet för move.
+    private Color color; // Color of the car
+    private String modelName; // The car model name
     protected Direction direction = Direction.UP;
-    protected Point.Double position = new Point.Double(); //default x=0, y=0
+    private Point.Double position; //default x=0, y=0
+
+    /**
+     *
+     * @param nrDoors anger antalet dörrar
+     * @param enginePower anger motoreffekt
+     * @param color anger färgen
+     * @param modelName anger modelnamn
+     * @param position anger bilens startposition
+     */
+    protected Car (int nrDoors, double enginePower, Color color, String modelName, Point.Double position){
+        this.nrDoors = nrDoors;
+        this.enginePower = enginePower;
+        this.color = color;
+        this.modelName = modelName;
+        this.position = position;
+        stopEngine();
+    }
 
     /**
      * Returnerar antalet dörrar.
+     * @return
      */
     protected int getNrDoors(){
         return nrDoors;
@@ -42,6 +60,7 @@ public abstract class Car implements Movable{
 
     /**
      * Används för att sätta färgen på en bil
+     * @param clr är av typen Color som bestämmer objektets färg
      */
     protected void setColor(Color clr){
         color = clr;
@@ -66,33 +85,29 @@ public abstract class Car implements Movable{
      */
     protected abstract double speedFactor();
 
-    /**Eftersom min funktionen väljer det som är minst av funktionen och enginpower
-     * kommer currentSpeed aldrig vara större än enginePower.
-     */
     private void incrementSpeed(double amount){
         currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
     }
 
-    /**Eftersom max funktionen väljer det som är störst av funktionen och 0.0
-     * kommer currentSpeed aldrig vara mindre än 0.0.
-     */
     private void decrementSpeed(double amount){
         currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0.0);
     }
 
-    /**if satsen accepterar bara värden mellan 0 och 1. Detta gör att gas aldrig kommer
-    * kunna sänka farten.
-    */
-    protected void gas(double amount){
+    /**
+     * @param amount är av typen Double som avgör hur mycket currentSpeed ökar
+     *
+     */
+    public void gas(double amount){
         if(amount>=0.0 && amount <= 1.0)
             incrementSpeed(amount);
     }
 
-    /**if-satsen accepterar bara värden mellan 0 och 1. Detta gör att break aldrig kommer
-    * kunna höja farten.
-    */
+    /**
+     *
+     * @param amount är av typen Double som avgör hur mycket currentSpeed minskar
+     */
     // TODO fix this method according to lab pm
-    protected void brake(double amount){
+    public void brake(double amount){
         if(amount>=0.0 && amount <= 1.0)
             decrementSpeed(amount);
     }
