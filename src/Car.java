@@ -8,7 +8,7 @@ public abstract class Car implements Movable{
     private double enginePower, currentSpeed, x,y; // Engine power of the car The current speed of the car, riktningarna i planet för move.
     private Color color; // Color of the car
     private String modelName; // The car model name
-    protected Direction direction = Direction.UP;
+    private Direction direction = Direction.UP;
     private Point.Double position; //default x=0, y=0
 
     /**
@@ -95,7 +95,7 @@ public abstract class Car implements Movable{
 
     /**
      * @param amount är av typen Double som avgör hur mycket currentSpeed ökar
-     *
+     * Metoden ökar hastigheten på bilen med amount
      */
     public void gas(double amount){
         if(amount>=0.0 && amount <= 1.0)
@@ -103,7 +103,7 @@ public abstract class Car implements Movable{
     }
 
     /**
-     *
+     *Minskar hastigheten på bilen med amount
      * @param amount är av typen Double som avgör hur mycket currentSpeed minskar
      */
     // TODO fix this method according to lab pm
@@ -169,7 +169,15 @@ public abstract class Car implements Movable{
     /**
      * Returnerar bilens riktning
      */
-    protected Direction getDirection(){
-       return direction;
+    protected Direction getDirection() {
+        return direction;
+    }
+
+    /**
+     * En setter för Direction
+     * @param direction anger riktningen för bilen
+     */
+    protected void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

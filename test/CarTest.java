@@ -17,7 +17,7 @@ public class CarTest {
     public void testMove(){
         volvo.startEngine();
 
-        volvo.direction = Car.Direction.UP;
+        volvo.setDirection(Car.Direction.UP);
         volvo.move();
         assertTrue(volvo.getPos().getX() == 0);
         assertTrue(volvo.getPos().getY() != 0);
@@ -40,7 +40,7 @@ public class CarTest {
 
     @Test
     public void testTurnLeft(){
-        saab.direction = Car.Direction.UP;
+        saab.setDirection(Car.Direction.UP);
         saab.turnLeft();
 
         assertTrue(saab.getDirection() == Car.Direction.LEFT);
@@ -54,7 +54,7 @@ public class CarTest {
 
     @Test
     public void testTurnRight(){
-        saab.direction = Car.Direction.UP;
+        saab.setDirection(Car.Direction.UP);
         saab.turnRight();
 
         assertTrue(saab.getDirection() == Car.Direction.RIGHT);
