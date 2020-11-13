@@ -11,101 +11,95 @@ public abstract class Car implements Movable{
     protected Direction direction = Direction.UP;
     protected Point.Double position = new Point.Double(); //default x=0, y=0
 
+    /**
+     * Returnerar antalet dörrar.
+     */
     protected int getNrDoors(){
         return nrDoors;
     }
 
     /**
-     * Returnerar antalet dörrar.
+     * Returnerar motoreffekten
      */
-
     protected double getEnginePower(){
         return enginePower;
     }
 
-    /**
-     * Returnerar motoreffekten
-     */
-
-    protected double getCurrentSpeed(){
-        return currentSpeed;
-    }
     /** Eftersom incrementspeed och decrementspeed ger att man inte kan överstiga
      * enginepower respektive understiga 0
      * Returnerar currentSpeed
      */
+    protected double getCurrentSpeed(){
+        return currentSpeed;
+    }
 
+    /**
+     * Returnerar färgen på en bil
+     */
     protected Color getColor(){
         return color;
     }
 
     /**
-     * Returnerar färgen på en bil
-     * @param clr
+     * Används för att sätta färgen på en bil
      */
-
     protected void setColor(Color clr){
         color = clr;
     }
 
     /**
-     * Används för att sätta färgen på en bil
+     * Startar motorn
      */
-
     protected void startEngine(){
         currentSpeed = 0.1;
     }
 
     /**
-     * Startar motorn
+     * Stänger av motorn
      */
-
     protected void stopEngine(){
         currentSpeed = 0;
     }
 
     /**
-     * Stänger av motorn
-     * @return
-     */
-
-    protected abstract double speedFactor();
-    /**
      * En speedFactor som anvädns i incrementSpeed och decrementSpeed
-     * @param amount
      */
+    protected abstract double speedFactor();
 
-    protected void incrementSpeed(double amount){
-        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
-    }
     /**Eftersom min funktionen väljer det som är minst av funktionen och enginpower
      * kommer currentSpeed aldrig vara större än enginePower.
      */
-
-    protected void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0.0);
+    private void incrementSpeed(double amount){
+        currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
     }
+
     /**Eftersom max funktionen väljer det som är störst av funktionen och 0.0
      * kommer currentSpeed aldrig vara mindre än 0.0.
      */
+    private void decrementSpeed(double amount){
+        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0.0);
+    }
 
+    /**if satsen accepterar bara värden mellan 0 och 1. Detta gör att gas aldrig kommer
+    * kunna sänka farten.
+    */
     protected void gas(double amount){
         if(amount>=0.0 && amount <= 1.0)
             incrementSpeed(amount);
     }
-    /**if satsen accepterar bara värden mellan 0 och 1. Detta gör att gas aldrig kommer
-    * kunna sänka farten.
-    */
 
+    /**if-satsen accepterar bara värden mellan 0 och 1. Detta gör att break aldrig kommer
+    * kunna höja farten.
+    */
     // TODO fix this method according to lab pm
     protected void brake(double amount){
         if(amount>=0.0 && amount <= 1.0)
             decrementSpeed(amount);
     }
-    /**if-satsen accepterar bara värden mellan 0 och 1. Detta gör att break aldrig kommer
-    * kunna höja farten.
-    */
 
+    /** Skapar en enum med riktningar. Dessa går inte att ändra och är lite som
+     * "final variables"
+     */
     protected enum Direction{
         RIGHT,
         LEFT,
@@ -113,6 +107,10 @@ public abstract class Car implements Movable{
         DOWN,
     }
 
+     /**Tanken är att man ska ändra x/y koordninaterna efter riktning och hastighet
+     eftersom vi gör om Point till en double använder vi setLocation istället för move för
+     att byta position.
+     */
     public void move() {
         switch (direction){
             case UP: position.setLocation(x, y += currentSpeed); break;
@@ -121,11 +119,10 @@ public abstract class Car implements Movable{
             case LEFT: position.setLocation(x -= currentSpeed, y); break;
         }
     }
-     /**Tanken är att man ska ändra x/y koordninaterna efter riktning och hastighet
-     eftersom vi gör om Point till en double använder vi setLocation istället för move för
-     att byta lokalen.
-     */
 
+    /** Här ändras riktningen mha switch statement. Så vid turnLeft så ändras riktningen ett steg till vänster
+     * så turnLeft: UP->LEFT, LEFT->DOWN
+     */
     public void turnLeft() {
         switch (direction){
             case UP: direction = Direction.LEFT; break;
@@ -134,10 +131,10 @@ public abstract class Car implements Movable{
             case RIGHT: direction = Direction.UP; break;
         }
     }
-    /** Här ändras riktningen mha switch statement. Så vid turnLeft så ändras riktningen ett steg till vänster
-     * så turnLeft: UP->LEFT, LEFT->DOWN
-     */
 
+    /** Samma princip som i turnLeft fast åt motsatt håll.
+     *
+     */
    public void turnRight() {
         switch (direction){
             case UP: direction = Direction.RIGHT; break;
@@ -146,14 +143,17 @@ public abstract class Car implements Movable{
             case LEFT: direction = Direction.UP; break;
         }
     }
-    /** Samma princip som i turnLeft fast åt motsatt håll.
-     *
-     */
 
+    /**
+     *Returnerar en bils position
+     */
     protected Point2D getPos(){
        return position;
     }
 
+    /**
+     * Returnerar bilens riktning
+     */
     protected Direction getDirection(){
        return direction;
     }
